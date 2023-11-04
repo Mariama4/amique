@@ -23,9 +23,7 @@ export class FilesController {
 		const saveArray: MFile[] = [new MFile(file)];
 		if (file.mimetype.includes('image')) {
 			const buffer = await this.fileService.convertToWebP(file.buffer);
-			saveArray.push(
-				new MFile({ originalname: `${file.originalname.split('.')[0]}.webp`, buffer }),
-			);
+			saveArray.push(new MFile({ originalname: `${file.originalname.split('.')[0]}.png`, buffer }));
 		}
 		return this.fileService.saveFiles(saveArray);
 	}

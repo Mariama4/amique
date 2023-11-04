@@ -4,14 +4,13 @@ import { format } from 'date-fns';
 import { path } from 'app-root-path';
 import { ensureDir, writeFile } from 'fs-extra';
 import { MFile } from './mfile.class';
-import Sharp from 'sharp';
+import sharp from 'sharp';
 
 @Injectable()
 export class FilesService {
 	async saveFiles(files: MFile[]): Promise<FileElementResponse[]> {
-		const dateFolder = format(new Date(), 'yyyy-MM-dd');
+		const dateFolder = format(new Date(), 'yyyy-MM-dd-HH-mm-ss-SSS');
 		const uploadFolder = `${path}/uploads/${dateFolder}`;
-		console.log(uploadFolder);
 		await ensureDir(uploadFolder);
 		const res: FileElementResponse[] = [];
 
@@ -24,6 +23,6 @@ export class FilesService {
 	}
 
 	convertToWebP(file: Buffer): Promise<Buffer> {
-		return Sharp(file).webp().toBuffer();
+		return sharp(file).png().toBuffer();
 	}
 }
