@@ -25,6 +25,7 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^10.1.1",
     "@nestjs/mongoose": "^10.0.1",
+    "@nestjs/passport": "^10.0.2",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/serve-static": "^4.0.0",
     "app-root-path": "^3.1.0",
@@ -32,6 +33,7 @@
     "class-validator": "^0.14.0",
     "date-fns": "^2.30.0",
     "mongoose": "^7.6.4",
+    "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "sharp": "^0.32.6"

@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { path } from 'app-root-path';
 import { ensureDir, writeFile } from 'fs-extra';
 import { MFile } from './mfile.class';
-import sharp from 'sharp';
+import Sharp from 'sharp';
 
 @Injectable()
 export class FilesService {
