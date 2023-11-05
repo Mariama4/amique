@@ -90,7 +90,7 @@ export class TelegramBotService {
 		botStatus: boolean;
 		botPID: number;
 	}> {
-		const bot = spawn('python3', ['bot/bot.py', `-t=${token}`]);
+		const bot = spawn('python3', ['telegram-bot/bot.py', `-t=${token}`]);
 
 		return {
 			isDone: true,
