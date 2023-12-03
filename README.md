@@ -15,4 +15,4 @@ todo:
 - улучшить качество readme
 - схема бд
 
-схема бд - readme/index.html
+![схема бд](readme/amique.svg)
