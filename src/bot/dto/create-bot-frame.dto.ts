@@ -1,135 +1,95 @@
 class FramePhoto {
-	src: string;
-
+	source: string;
 	caption: string;
 }
 
 class FrameVideo {
-	src: string;
-
+	source: string;
 	caption: string;
 }
 
 class FrameAnimation {
-	src: string;
-
+	source: string;
 	caption: string;
 }
 
 class FrameDocument {
-	src: string;
-
+	source: string;
 	caption: string;
 }
 
 class FrameAudio {
-	src: string;
-
+	source: string;
 	caption: string;
 }
 
 class FrameVoice {
-	src: string;
-
+	source: string;
 	caption: string;
 }
 
 class FrameVideoNote {
-	src: string;
-
+	source: string;
 	caption: string;
 }
 
 class FrameMediaGroup {
-	src: [string];
-
+	source: [string];
 	caption: string;
 }
 
 class FrameLocation {
 	latitude: string;
-
 	longitude: string;
-
-	horizontal_accuracy: string;
-
+	horizontalAccuracy: string;
 	caption: string;
 }
 
 class FrameVenue {
 	latitude: string;
-
 	longitude: string;
-
 	title: string;
-
 	address: string;
-
 	caption: string;
 }
 
 class FrameContact {
-	phone_number: string;
-
-	first_name: string;
-
-	second_name: string;
-
+	phoneNumber: string;
+	firstName: string;
+	secondName: string;
 	caption: string;
 }
 
 class FrameWebApp {
-	src: string;
-
-	button_text: string;
-
+	source: string;
+	buttonText: string;
 	caption: string;
 }
 
 class FrameMarkup {
 	text: string;
-
-	next_frame_id: string;
+	nextFrameId: string;
 }
 
 export class CreateFrame {
-	bot_id: string;
-
-	frame_name: string;
-
-	next_frame_name: string;
-
-	disable_web_page_preview: boolean;
-
+	name: string;
+	description: string;
+	nextFrameId: string;
+	disableWebPagePreview: boolean;
 	type: string;
-
-	parse_mode: string;
-
+	parseMode: string;
 	text: string;
-
 	photo: FramePhoto;
-
 	video: FrameVideo;
-
 	animation: FrameAnimation;
-
 	document: FrameDocument;
-
 	audio: FrameAudio;
-
 	voice: FrameVoice;
-
 	video_note: FrameVideoNote;
-
 	media_group: FrameMediaGroup;
-
 	location: FrameLocation;
-
 	venue: FrameVenue;
-
 	contact: FrameContact;
-
 	web_app: FrameWebApp;
-
 	markup: [FrameMarkup];
 }
