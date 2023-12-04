@@ -18,7 +18,6 @@ import {
 	FRAME_ALREADY_CREATED_ERROR,
 	FRAME_NOT_CREATED_ERROR,
 	SAME_STATUS_ERROR,
-	UNEXPECTED_CREATE_BOT_ERROR,
 } from './bot.constants';
 import { CreateFrame } from './dto/create-bot-frame.dto';
 import { UpdateBotStatus } from './dto/update-bot-status.dto';
