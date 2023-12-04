@@ -5,154 +5,173 @@ import { UserModel } from 'src/user/models/user.model';
 export type FrameDocument = HydratedDocument<FrameModel>;
 
 class FramePhoto {
-	@Prop()
-	src: string;
+	@Prop({ default: '' })
+	source: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameVideo {
-	@Prop()
-	src: string;
+	@Prop({ default: '' })
+	source: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameAnimation {
-	@Prop()
-	src: string;
+	@Prop({ default: '' })
+	source: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class _FrameDocument {
-	@Prop()
-	src: string;
+	@Prop({ default: '' })
+	source: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameAudio {
-	@Prop()
-	src: string;
+	@Prop({ default: '' })
+	source: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameVoice {
-	@Prop()
-	src: string;
+	@Prop({ default: '' })
+	source: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameVideoNote {
-	@Prop()
-	src: string;
+	@Prop({ default: '' })
+	source: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameMediaGroup {
-	@Prop()
-	src: [string];
+	@Prop({ default: [''] })
+	source: [string];
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameLocation {
-	@Prop()
+	@Prop({ default: '' })
 	latitude: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	longitude: string;
 
-	@Prop()
-	horizontal_accuracy: string;
+	@Prop({ default: '' })
+	horizontalAccuracy: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameVenue {
-	@Prop()
+	@Prop({ default: '' })
 	latitude: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	longitude: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	title: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	address: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameContact {
-	@Prop()
-	phone_number: string;
+	@Prop({ default: '' })
+	phoneNumber: string;
 
-	@Prop()
-	first_name: string;
+	@Prop({ default: '' })
+	firstName: string;
 
-	@Prop()
-	second_name: string;
+	@Prop({ default: '' })
+	secondName: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameWebApp {
-	@Prop()
-	src: string;
+	@Prop({ default: '' })
+	source: string;
 
-	@Prop()
-	button_text: string;
+	@Prop({ default: '' })
+	buttonText: string;
 
-	@Prop()
+	@Prop({ default: '' })
 	caption: string;
 }
 
 class FrameMarkup {
-	@Prop()
+	@Prop({ default: '' })
 	text: string;
 
-	@Prop()
-	next_frame_id: string;
+	@Prop({ type: MSchema.Types.ObjectId, ref: 'frames' })
+	nextId: Types.ObjectId;
 }
 
 @Schema({ collection: 'frames', timestamps: true })
 export class FrameModel {
-	@Prop({ required: true, type: MSchema.Types.ObjectId, ref: UserModel.name })
-	bot_id: Types.ObjectId;
-
 	@Prop({ required: true })
-	frame_name: string;
+	name: string;
 
-	@Prop({ required: true })
-	next_frame_name: string;
+	@Prop({
+		default: '',
+	})
+	description: string;
 
-	@Prop()
-	disable_web_page_preview: boolean;
+	@Prop({ required: true, type: MSchema.Types.ObjectId, ref: 'frames' })
+	nextId: Types.ObjectId;
 
-	@Prop({ required: true, default: 'text' })
+	@Prop({
+		required: true,
+		enum: [
+			'TEXT',
+			'PHOTO',
+			'MEDIA_GROUP',
+			'VIDEO_NOTE',
+			'VENUE',
+			'CONTACT',
+			'WEB_APP',
+			'DOCUMENT',
+			'LOCATION',
+			'VIDEO',
+			'ANIMATION',
+			'VIDEO',
+			'VOICE',
+		],
+	})
 	type: string;
 
-	@Prop({ required: true, default: 'html' })
-	parse_mode: string;
+	@Prop({ required: true, enum: ['HTML', 'Markdown'] })
+	parseMode: string;
 
-	@Prop()
+	@Prop({ required: true })
+	disableWebPagePreview: boolean;
+
+	@Prop({ default: '' })
 	text: string;
 
 	@Prop()
