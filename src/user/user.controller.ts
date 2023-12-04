@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ALREADY_REGISTERED_ERROR } from './user.constants';
+import { USER_ALREADY_CREATED_ERROR, USER_NOT_FOUND_ERROR } from './user.constants';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 
@@ -22,29 +22,49 @@ export class UserController {
 	//@UseGuards(JwtAuthGuard)
 	@Post('create')
 	async create(@Body() dto: CreateUserDto) {
-		const oldUser = await this.userService.findByEmail(dto.login);
-		if (oldUser) {
-			throw new BadRequestException(ALREADY_REGISTERED_ERROR);
+		const isUserExisted = await this.userService.findByEmail(dto.login);
+
+		if (isUserExisted != null) {
+			throw new BadRequestException(
+				USER_ALREADY_CREATED_ERROR.error,
+				USER_ALREADY_CREATED_ERROR.message,
+			);
 		}
-		return this.userService.create(dto);
+
+		const newUser = await this.userService.create(dto);
+
+		return newUser;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Get('all')
 	async findAll() {
-		return this.userService.findAll();
+		const allUsers = await this.userService.findAll();
+		return allUsers;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Get(':email')
 	async findByEmail(@Param('email') email: string) {
-		return this.userService.findByEmail(email);
+		const oneUser = await this.userService.findByEmail(email);
+
+		if (oneUser == null) {
+			throw new BadRequestException(USER_NOT_FOUND_ERROR.error, USER_NOT_FOUND_ERROR.message);
+		}
+
+		return oneUser;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Patch(':id')
 	async patch(@Param('id', IdValidationPipe) id: string, @Body() dto: CreateUserDto) {
-		return this.userService.updateById(id, dto);
+		const isUserExisted = await this.userService.findById(id);
+
+		if (isUserExisted == null) {
+			throw new BadRequestException(USER_NOT_FOUND_ERROR.error, USER_NOT_FOUND_ERROR.message);
+		}
+
+		return this.userService.updateUserEmailById(id, dto.login);
 	}
 
 	//@UseGuards(JwtAuthGuard)

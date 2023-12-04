@@ -37,6 +37,10 @@ export class UserService {
 		return this.userModel.findOne({ email }).exec();
 	}
 
+	async findById(id: string) {
+		return this.userModel.findById(id).exec();
+	}
+
 	async findAll() {
 		return this.userModel.find().exec();
 	}
@@ -45,12 +49,7 @@ export class UserService {
 		return this.userModel.findByIdAndDelete(id).exec();
 	}
 
-	async updateById(id: string | Types.ObjectId, dto: CreateUserDto) {
-		const salt = await genSalt(10);
-		const newUser = {
-			email: dto.login,
-			passwordHash: await hash(dto.password, salt),
-		};
-		return this.userModel.findByIdAndUpdate(id, newUser, { new: true }).exec();
+	async updateUserEmailById(id: string | Types.ObjectId, email: string) {
+		return this.userModel.updateOne({ _id: id }, { email }).exec();
 	}
 }
