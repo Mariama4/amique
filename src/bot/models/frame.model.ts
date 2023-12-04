@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MSchema, Types } from 'mongoose';
 import { UserModel } from 'src/user/models/user.model';
 
-export type TelegramBotFrameDocument = HydratedDocument<TelegramBotFrameModel>;
+export type FrameDocument = HydratedDocument<FrameModel>;
 
 class FramePhoto {
 	@Prop()
@@ -28,7 +28,7 @@ class FrameAnimation {
 	caption: string;
 }
 
-class FrameDocument {
+class _FrameDocument {
 	@Prop()
 	src: string;
 
@@ -132,8 +132,8 @@ class FrameMarkup {
 	next_frame_id: string;
 }
 
-@Schema()
-export class TelegramBotFrameModel {
+@Schema({ collection: 'frames', timestamps: true })
+export class FrameModel {
 	@Prop({ required: true, type: MSchema.Types.ObjectId, ref: UserModel.name })
 	bot_id: Types.ObjectId;
 
@@ -165,7 +165,7 @@ export class TelegramBotFrameModel {
 	animation: FrameAnimation;
 
 	@Prop()
-	document: FrameDocument;
+	document: _FrameDocument;
 
 	@Prop()
 	audio: FrameAudio;
@@ -195,4 +195,4 @@ export class TelegramBotFrameModel {
 	markup: [FrameMarkup];
 }
 
-export const TelegramBotFrameSchema = SchemaFactory.createForClass(TelegramBotFrameModel);
+export const FrameSchema = SchemaFactory.createForClass(FrameModel);

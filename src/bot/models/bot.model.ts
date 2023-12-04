@@ -1,12 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type TelegramBotDocument = HydratedDocument<TelegramBotModel>;
+export type Document = HydratedDocument<BotModel>;
 
-@Schema()
-export class TelegramBotModel {
-	@Prop({ required: true, unique: true })
+@Schema({ collection: 'bots' })
+export class BotModel {
+	@Prop({ required: true })
 	name: string;
+
+	@Prop({
+		default: '',
+	})
+	description: string;
 
 	@Prop({
 		default: null,
@@ -20,4 +25,4 @@ export class TelegramBotModel {
 	status: boolean;
 }
 
-export const TelegramBotSchema = SchemaFactory.createForClass(TelegramBotModel);
+export const BotSchema = SchemaFactory.createForClass(BotModel);

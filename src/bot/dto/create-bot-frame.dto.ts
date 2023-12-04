@@ -92,7 +92,7 @@ class FrameMarkup {
 	next_frame_id: string;
 }
 
-export class CreateTelegramBotFrame {
+export class CreateFrame {
 	bot_id: string;
 
 	frame_name: string;
