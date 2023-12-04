@@ -4,10 +4,6 @@ import { MongooseModuleOptions } from '@nestjs/mongoose';
 export const getMongoConfig = async (
 	configService: ConfigService,
 ): Promise<MongooseModuleOptions> => {
-	console.log({
-		uri: getMongoString(configService),
-		...getMongoOptions(configService),
-	});
 	return {
 		uri: getMongoString(configService),
 		...getMongoOptions(configService),
