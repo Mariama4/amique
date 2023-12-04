@@ -129,11 +129,16 @@ class FrameMarkup {
 	text: string;
 
 	@Prop({ type: MSchema.Types.ObjectId, ref: 'frames' })
-	nextId: Types.ObjectId;
+	nextFrameId: Types.ObjectId;
 }
 
 @Schema({ collection: 'frames', timestamps: true })
 export class FrameModel {
+	id: string;
+
+	@Prop({ required: true, type: MSchema.Types.ObjectId, ref: 'bots' })
+	botId: Types.ObjectId;
+
 	@Prop({ required: true })
 	name: string;
 
@@ -142,8 +147,8 @@ export class FrameModel {
 	})
 	description: string;
 
-	@Prop({ required: true, type: MSchema.Types.ObjectId, ref: 'frames' })
-	nextId: Types.ObjectId;
+	@Prop({ type: MSchema.Types.ObjectId, ref: 'frames' })
+	nextFrameId: Types.ObjectId;
 
 	@Prop({
 		required: true,
@@ -174,7 +179,7 @@ export class FrameModel {
 	@Prop({ default: '' })
 	text: string;
 
-	@Prop()
+	@Prop({ default: FramePhoto })
 	photo: FramePhoto;
 
 	@Prop()
