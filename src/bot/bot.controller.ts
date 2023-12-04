@@ -27,7 +27,7 @@ import { UpdateBotDto } from './dto/update-bot.dto';
 @Controller('bot')
 export class BotController {
 	constructor(private readonly botService: BotService) {}
-
+	//	 TODO: убрать повторение кода
 	//@UseGuards(JwtAuthGuard)
 	@Post('create')
 	async createBot(@Body() dto: CreateBotDto) {
