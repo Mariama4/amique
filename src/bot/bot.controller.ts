@@ -13,12 +13,17 @@ import {
 } from '@nestjs/common';
 import { CreateBotDto } from './dto/create-bot.dto';
 import {
-	ALREADY_REGISTERED_ERROR,
+	BOT_ALREADY_CREATED_ERROR,
+	BOT_NOT_CREATED_ERROR,
+	FRAME_ALREADY_CREATED_ERROR,
+	FRAME_NOT_CREATED_ERROR,
 	SAME_STATUS_ERROR,
 	UNEXPECTED_CREATE_BOT_ERROR,
 } from './bot.constants';
 import { CreateFrame } from './dto/create-bot-frame.dto';
 import { UpdateBotStatus } from './dto/update-bot-status.dto';
+import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
+import { UpdateBotDto } from './dto/update-bot.dto';
 
 @Controller('bot')
 export class BotController {
@@ -27,105 +32,203 @@ export class BotController {
 	//@UseGuards(JwtAuthGuard)
 	@Post('create')
 	async createBot(@Body() dto: CreateBotDto) {
-		const oldBot = await this.botService.findOneBotByName(dto.name);
-		if (oldBot) {
-			throw new BadRequestException(ALREADY_REGISTERED_ERROR);
+		//	Поиск бота по name и userId.
+		//	У разных пользователей могут быть боты с одинаковыми
+		//	именами, но у одного пользователя не должно быть два бота с одинаковым именем!
+		const isBotExists = await this.botService.findOneBotByNameAndUserId(dto.name, dto.userId);
+
+		if (isBotExists != null) {
+			throw new BadRequestException(
+				BOT_ALREADY_CREATED_ERROR.error,
+				BOT_ALREADY_CREATED_ERROR.message,
+			);
 		}
 
-		return this.botService.createBot(dto);
+		const newBot = await this.botService.createBot(dto);
+		return newBot;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Post(':bot_id/frame')
-	async createFrame(@Param('bot_id') bot_id: string, @Body() dto: CreateFrame) {
-		// проверка есть ли бот с таким айди и только после этого создание фрейма
-		// проверка есть ли такой фрейм с таким именем
-		return this.botService.createFrame(bot_id, dto);
+	async createFrame(@Param('bot_id', IdValidationPipe) botId: string, @Body() dto: CreateFrame) {
+		//	Проверяется есть ли такой бот с botId.
+		//	Если бот с таким botId существует, тогда
+		//	проверяется есть ли фрейм с таким botId и name
+
+		const isBotExists = await this.botService.findOneBotById(botId);
+
+		if (isBotExists == null) {
+			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		const isFrameExists = await this.botService.findOneFrameByBotIdAndName(botId, dto.name);
+
+		if (isFrameExists != null) {
+			throw new BadRequestException(
+				FRAME_ALREADY_CREATED_ERROR.error,
+				FRAME_ALREADY_CREATED_ERROR.message,
+			);
+		}
+
+		const newFrame = await this.botService.createFrame(botId, dto);
+
+		return newFrame;
 	}
 
 	//@UseGuards(JwtAuthGuard)
-	@Get('')
+	@Get('all')
 	async findAllBots() {
-		return this.botService.findAllBots();
+		//	Возвращает всех ботов, которые есть в базе
+		const allBots = await this.botService.findAllBots();
+		return allBots;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Get(':bot_id')
-	async findOneBot(@Param('bot_id') bot_id: string) {
-		return this.botService.findOneBotById(bot_id);
+	async findOneBot(@Param('bot_id', IdValidationPipe) botId: string) {
+		const oneBot = await this.botService.findOneBotById(botId);
+
+		if (oneBot == null) {
+			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		return oneBot;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Get(':bot_id/frame')
-	async findAllBotFrames(@Param('bot_id') bot_id: string) {
-		return this.botService.findAllBotFrames(bot_id);
+	async findAllBotFrames(@Param('bot_id', IdValidationPipe) botId: string) {
+		const isBotExists = await this.botService.findOneBotById(botId);
+
+		if (isBotExists == null) {
+			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		const allBotFrames = await this.botService.findAllFramesByBotId(botId);
+		return allBotFrames;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Get(':bot_id/frame/:frame_id')
-	async findOneBotFrame(@Param('bot_id') bot_id: string, @Param('frame_id') frame_id: string) {
+	async findOneBotFrame(
+		@Param('bot_id', IdValidationPipe) botId: string,
+		@Param('frame_id', IdValidationPipe) frameId: string,
+	) {
 		//проверка что бот есть
-		return this.botService.findOneBotFrame(frame_id);
+		const isBotExists = await this.botService.findOneBotById(botId);
+
+		if (isBotExists == null) {
+			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		const oneFrame = await this.botService.findOneFrameById(frameId);
+		return oneFrame;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Patch(':bot_id')
-	async patchBot(@Param('bot_id') bot_id: string, @Body() dto: CreateBotDto) {
-		return this.botService.updateBot(bot_id, dto);
+	async patchBot(@Param('bot_id', IdValidationPipe) botId: string, @Body() dto: UpdateBotDto) {
+		const isBotExists = await this.botService.findOneBotById(botId);
+
+		if (isBotExists == null) {
+			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		const patchedBot = await this.botService.updateBot(botId, dto);
+
+		return patchedBot;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Patch(':bot_id/status')
-	async switchBotStatus(@Param('bot_id') bot_id: string, @Body() dto: UpdateBotStatus) {
-		const bot = await this.botService.findOneBotById(bot_id);
+	async switchBotStatus(
+		@Param('bot_id', IdValidationPipe) botId: string,
+		@Body() dto: UpdateBotStatus,
+	) {
+		//	Проверить есть ли такой бот.
+		//	...
+		//	сначала запускаем/выключаем бота, после этого записываем в бд
+		//	потому что вдруг произойдет ошибка, а в бд бот запущен/выключен
+		//	...
+		// Обновить статус бота.
 
-		if (bot?.status === dto.status) {
-			// вернуть сообщение, что текущий статус и так равен переданному
+		const oneBot = await this.botService.findOneBotById(botId);
+
+		if (oneBot == null) {
+			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		if (oneBot.status == dto.status) {
 			throw new BadRequestException(SAME_STATUS_ERROR);
 		}
 
-		// сначала запускаем/выключаем бота, после этого записываем в бд
-		// потому что вдруг произойдет ошибка, а в бд бот запущен/выключен
+		let botPID: number | null;
 
-		const result: {
-			isDone: boolean;
-			botStatus: boolean;
-			botPID?: number;
-		} = dto.status
-			? await this.botService.startBot(bot.token)
-			: await this.botService.stopBot(bot.pid);
-
-		if (result.isDone) {
-			return this.botService.updateBotStatus(bot_id, {
-				status: result.botStatus,
-				pid: result.botPID,
-			});
+		if (dto.status) {
+			botPID = this.botService.startBot(oneBot.token);
 		} else {
-			throw new BadRequestException(UNEXPECTED_CREATE_BOT_ERROR);
+			botPID = this.botService.stopBot(dto.pid);
 		}
+
+		const patchedBot = await this.botService.updateBotStatus(oneBot.id, {
+			status: dto.status,
+			pid: botPID,
+		});
+
+		return patchedBot;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Patch(':bot_id/frame/:frame_id')
 	async patchFrame(
-		@Param('bot_id') bot_id: string,
-		@Param('frame_id') frame_id: string,
+		@Param('bot_id', IdValidationPipe) botId: string,
+		@Param('frame_id', IdValidationPipe) frameId: string,
 		@Body() dto: CreateFrame,
 	) {
-		// проверка что бот есть
-		return this.botService.updateBotFrame(frame_id, dto);
+		// Проверка что бот есть
+		// Проверка что фрейм у бота есть
+		const isBotExists = await this.botService.findOneBotById(botId);
+
+		if (isBotExists == null) {
+			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		const isFrameExists = await this.botService.findOneFrameById(frameId);
+
+		if (isFrameExists == null) {
+			throw new BadRequestException(FRAME_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		const patchedFrame = await this.botService.updateBotFrame(frameId, dto);
+
+		return patchedFrame;
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Delete(':bot_id')
-	async deleteBot(@Param('bot_id') bot_id: string) {
-		return this.botService.deleteBot(bot_id);
+	async deleteBot(@Param('bot_id', IdValidationPipe) botId: string) {
+		const isBotExists = await this.botService.findOneBotById(botId);
+
+		if (isBotExists == null) {
+			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
+		}
+
+		return this.botService.deleteBot(isBotExists.id);
 	}
 
 	//@UseGuards(JwtAuthGuard)
 	@Delete(':bot_id/frame/:frame_id')
-	async deleteFrame(@Param('bot_id') bot_id: string, @Param('frame_id') frame_id: string) {
+	async deleteFrame(
+		@Param('bot_id', IdValidationPipe) botId: string,
+		@Param('frame_id', IdValidationPipe) frameId: string,
+	) {
 		// проверка что такой бот есть
-		return this.botService.deleteBotFrame(frame_id);
+		const isFrameExists = await this.botService.findOneFrameById(botId);
+
+		if (isFrameExists == null) {
+			throw new BadRequestException(FRAME_NOT_CREATED_ERROR.error, FRAME_NOT_CREATED_ERROR.message);
+		}
+
+		return this.botService.deleteBot(isFrameExists.id);
 	}
 }
