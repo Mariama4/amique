@@ -85,13 +85,13 @@ export class BotController {
 	//@UseGuards(JwtAuthGuard)
 	@Get(':bot_id')
 	async findOneBot(@Param('bot_id', IdValidationPipe) botId: string) {
-		const oneBot = await this.botService.findOneBotById(botId);
+		const isBotExists = await this.botService.findOneBotById(botId);
 
-		if (oneBot == null) {
+		if (isBotExists == null) {
 			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
 		}
 
-		return oneBot;
+		return isBotExists;
 	}
 
 	//@UseGuards(JwtAuthGuard)
@@ -151,25 +151,25 @@ export class BotController {
 		//	...
 		// Обновить статус бота.
 
-		const oneBot = await this.botService.findOneBotById(botId);
+		const isBotExists = await this.botService.findOneBotById(botId);
 
-		if (oneBot == null) {
+		if (isBotExists == null) {
 			throw new BadRequestException(BOT_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
 		}
 
-		if (oneBot.status == dto.status) {
+		if (isBotExists.status == dto.status) {
 			throw new BadRequestException(SAME_STATUS_ERROR);
 		}
 
 		let botPID: number | null;
 
 		if (dto.status) {
-			botPID = this.botService.startBot(oneBot.token);
+			botPID = this.botService.startBot(isBotExists.token);
 		} else {
 			botPID = this.botService.stopBot(dto.pid);
 		}
 
-		const patchedBot = await this.botService.updateBotStatus(oneBot.id, {
+		const patchedBot = await this.botService.updateBotStatus(isBotExists.id, {
 			status: dto.status,
 			pid: botPID,
 		});
@@ -228,6 +228,6 @@ export class BotController {
 			throw new BadRequestException(FRAME_NOT_CREATED_ERROR.error, FRAME_NOT_CREATED_ERROR.message);
 		}
 
-		return this.botService.deleteBot(isFrameExists.id);
+		return this.botService.deleteBotFrame(isFrameExists.id);
 	}
 }

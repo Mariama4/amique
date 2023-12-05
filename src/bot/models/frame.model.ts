@@ -164,7 +164,6 @@ export class FrameModel {
 			'LOCATION',
 			'VIDEO',
 			'ANIMATION',
-			'VIDEO',
 			'VOICE',
 		],
 	})
