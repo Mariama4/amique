@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
-import { ALREADY_REGISTERED_ERROR } from './auth.constants';
+import { USER_ALREADY_CREATED_ERROR } from './auth.constants';
 import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
@@ -22,11 +22,18 @@ export class AuthController {
 	@UsePipes(new ValidationPipe())
 	@Post('register')
 	async register(@Body() dto: AuthDto) {
-		const oldUser = await this.userService.findOneByEmail(dto.login);
-		if (oldUser) {
-			throw new BadRequestException(ALREADY_REGISTERED_ERROR);
+		const isUserExists = await this.userService.findOneByEmail(dto.login);
+
+		if (isUserExists != null) {
+			throw new BadRequestException(
+				USER_ALREADY_CREATED_ERROR.error,
+				USER_ALREADY_CREATED_ERROR.message,
+			);
 		}
-		return this.userService.create(dto);
+
+		const newUser = await this.userService.create(dto);
+
+		return newUser;
 	}
 
 	@UsePipes(new ValidationPipe())
@@ -34,6 +41,7 @@ export class AuthController {
 	@Post('login')
 	async login(@Body() { login, password }: AuthDto) {
 		const { email } = await this.userService.validateUser(login, password);
-		return this.authService.login(email);
+		const userAccessTokenObject = await this.authService.login(email);
+		return userAccessTokenObject;
 	}
 }
