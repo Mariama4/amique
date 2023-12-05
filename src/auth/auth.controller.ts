@@ -1,4 +1,12 @@
-import { Controller, Post, Body, HttpCode, BadRequestException } from '@nestjs/common';
+import {
+	Controller,
+	Post,
+	Body,
+	HttpCode,
+	BadRequestException,
+	UsePipes,
+	ValidationPipe,
+} from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { ALREADY_REGISTERED_ERROR } from './auth.constants';
@@ -11,17 +19,17 @@ export class AuthController {
 		private readonly authService: AuthService,
 	) {}
 
-	//@UsePipes(new ValidationPipe())
+	@UsePipes(new ValidationPipe())
 	@Post('register')
 	async register(@Body() dto: AuthDto) {
-		const oldUser = await this.userService.findByEmail(dto.login);
+		const oldUser = await this.userService.findOneByEmail(dto.login);
 		if (oldUser) {
 			throw new BadRequestException(ALREADY_REGISTERED_ERROR);
 		}
 		return this.userService.create(dto);
 	}
 
-	//@UsePipes(new ValidationPipe())
+	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Post('login')
 	async login(@Body() { login, password }: AuthDto) {
