@@ -12,11 +12,14 @@ export class UserService {
 
 	async validateUser(email: string, password: string): Promise<Pick<UserModel, 'email'>> {
 		const user = await this.findOneByEmail(email);
-		if (!user) {
+
+		if (user == null) {
 			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
 		}
 
+		// TODO: что compare возвращает если пароль некорректен?
 		const isCorrectPassword = await compare(password, user.passwordHash);
+
 		if (!isCorrectPassword) {
 			throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
 		}
