@@ -11,7 +11,7 @@ export class UserService {
 	constructor(@InjectModel(UserModel.name) private userModel: Model<UserDocument>) {}
 
 	async validateUser(email: string, password: string): Promise<Pick<UserModel, 'email'>> {
-		const user = await this.findByEmail(email);
+		const user = await this.findOneByEmail(email);
 		if (!user) {
 			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
 		}
@@ -33,7 +33,11 @@ export class UserService {
 		return newUser.save();
 	}
 
-	async findByEmail(email: string) {
+	async findManyByEmail(email: string) {
+		return this.userModel.find({ email }).exec();
+	}
+
+	async findOneByEmail(email: string) {
 		return this.userModel.findOne({ email }).exec();
 	}
 
@@ -46,7 +50,7 @@ export class UserService {
 	}
 
 	async deleteById(id: string | Types.ObjectId) {
-		return this.userModel.findByIdAndDelete(id).exec();
+		return this.userModel.deleteOne({ _id: id }).exec();
 	}
 
 	async updateUserEmailById(id: string | Types.ObjectId, email: string) {

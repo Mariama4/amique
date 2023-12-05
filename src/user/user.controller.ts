@@ -19,12 +19,12 @@ import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
-	//@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard)
 	@Post('create')
 	async create(@Body() dto: CreateUserDto) {
-		const isUserExisted = await this.userService.findByEmail(dto.login);
+		const isUserExists = await this.userService.findOneByEmail(dto.login);
 
-		if (isUserExisted != null) {
+		if (isUserExists != null) {
 			throw new BadRequestException(
 				USER_ALREADY_CREATED_ERROR.error,
 				USER_ALREADY_CREATED_ERROR.message,
@@ -36,40 +36,52 @@ export class UserController {
 		return newUser;
 	}
 
-	//@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard)
 	@Get('all')
-	async findAll() {
+	async findAllUsers() {
 		const allUsers = await this.userService.findAll();
 		return allUsers;
 	}
 
-	//@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard)
 	@Get(':email')
 	async findByEmail(@Param('email') email: string) {
-		const oneUser = await this.userService.findByEmail(email);
+		const isUserExists = await this.userService.findOneByEmail(email);
 
-		if (oneUser == null) {
+		if (isUserExists == null) {
 			throw new BadRequestException(USER_NOT_FOUND_ERROR.error, USER_NOT_FOUND_ERROR.message);
 		}
 
-		return oneUser;
+		return isUserExists;
 	}
 
-	//@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard)
 	@Patch(':id')
 	async patch(@Param('id', IdValidationPipe) id: string, @Body() dto: CreateUserDto) {
-		const isUserExisted = await this.userService.findById(id);
+		const isUserExists = await this.userService.findById(id);
 
-		if (isUserExisted == null) {
+		if (isUserExists == null) {
 			throw new BadRequestException(USER_NOT_FOUND_ERROR.error, USER_NOT_FOUND_ERROR.message);
 		}
 
-		return this.userService.updateUserEmailById(id, dto.login);
+		const patchedUser = await this.userService.updateUserEmailById(isUserExists.id, dto.login);
+
+		return patchedUser;
 	}
 
-	//@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard)
 	@Delete(':id')
 	async delete(@Param('id', IdValidationPipe) id: string) {
-		return this.userService.deleteById(id);
+		const isUserExists = await this.userService.findById(id);
+
+		if (isUserExists == null) {
+			throw new BadRequestException(USER_NOT_FOUND_ERROR.error, USER_NOT_FOUND_ERROR.message);
+		}
+
+		const deletedUser = await this.userService.deleteById(isUserExists.id);
+
+		return deletedUser;
 	}
+
+	//TODO: добавить полнотекстовый поиск пример: https://www.mongodb.com/basics/full-text-search#:~:text=launch%20the%20process.-,Once,-the%20index%20is
 }
