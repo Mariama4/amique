@@ -17,9 +17,8 @@ export class UserService {
 			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
 		}
 
-		// TODO: что compare возвращает если пароль некорректен?
 		const isCorrectPassword = await compare(password, user.passwordHash);
-
+		// compare returns boolean
 		if (!isCorrectPassword) {
 			throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
 		}
@@ -29,10 +28,12 @@ export class UserService {
 
 	async create(dto: { login: string; password: string }) {
 		const salt = await genSalt(10);
+		const passwordHash = await hash(dto.password, salt);
 		const newUser = new this.userModel({
 			email: dto.login,
-			passwordHash: await hash(dto.password, salt),
+			passwordHash: passwordHash,
 		});
+
 		return newUser.save();
 	}
 
