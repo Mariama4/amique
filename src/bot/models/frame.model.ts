@@ -132,6 +132,10 @@ class FrameMarkup {
 	nextFrameId: Types.ObjectId;
 }
 
+class FramePoll {}
+
+class FrameDice {}
+
 @Schema({ collection: 'frames', timestamps: true })
 export class FrameModel {
 	id: string;
@@ -155,16 +159,19 @@ export class FrameModel {
 		enum: [
 			'TEXT',
 			'PHOTO',
-			'MEDIA_GROUP',
-			'VIDEO_NOTE',
-			'VENUE',
-			'CONTACT',
-			'WEB_APP',
+			'AUDIO',
 			'DOCUMENT',
-			'LOCATION',
 			'VIDEO',
 			'ANIMATION',
 			'VOICE',
+			'VIDEO_NOTE',
+			'MEDIA_GROUP',
+			'LOCATION',
+			'VENUE',
+			'CONTACT',
+			'POLL',
+			'DICE',
+			'WEB_APP',
 		],
 	})
 	type: string;
@@ -197,10 +204,10 @@ export class FrameModel {
 	voice: FrameVoice;
 
 	@Prop()
-	video_note: FrameVideoNote;
+	videoNote: FrameVideoNote;
 
 	@Prop()
-	media_group: FrameMediaGroup;
+	mediaGroup: FrameMediaGroup;
 
 	@Prop()
 	location: FrameLocation;
@@ -212,7 +219,15 @@ export class FrameModel {
 	contact: FrameContact;
 
 	@Prop()
-	web_app: FrameWebApp;
+	webApp: FrameWebApp;
+
+	// TODO: протестировать в боте и определить тут
+	@Prop()
+	poll: FramePoll;
+
+	// TODO: протестировать в боте и определить тут
+	@Prop()
+	dice: FrameDice;
 
 	@Prop()
 	markup: [FrameMarkup];

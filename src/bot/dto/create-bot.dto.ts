@@ -1,4 +1,4 @@
-import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import { IsAlphanumeric, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateBotDto {
 	@IsNotEmpty()
@@ -8,6 +8,7 @@ export class CreateBotDto {
 
 	@IsNotEmpty()
 	@IsString()
+	@IsAlphanumeric()
 	name: string;
 
 	@IsNotEmpty()

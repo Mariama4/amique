@@ -1,4 +1,5 @@
 import {
+	IsAlpha,
 	IsArray,
 	IsBoolean,
 	IsEnum,
@@ -197,9 +198,14 @@ class FrameMarkup {
 	nextFrameId: string;
 }
 
+class FramePoll {}
+
+class FrameDice {}
+
 export class CreateFrame {
 	@IsNotEmpty()
 	@IsString()
+	@IsAlpha()
 	name: string;
 
 	@IsNotEmpty()
@@ -256,11 +262,11 @@ export class CreateFrame {
 
 	@IsOptional()
 	@ValidateNested()
-	video_note: FrameVideoNote;
+	videoNote: FrameVideoNote;
 
 	@IsOptional()
 	@ValidateNested()
-	media_group: FrameMediaGroup;
+	mediaGroup: FrameMediaGroup;
 
 	@IsOptional()
 	@ValidateNested()
@@ -276,7 +282,15 @@ export class CreateFrame {
 
 	@IsOptional()
 	@ValidateNested()
-	web_app: FrameWebApp;
+	webApp: FrameWebApp;
+
+	// TODO:
+	@IsOptional()
+	poll: FramePoll;
+
+	// TODO:
+	@IsOptional()
+	dice: FrameDice;
 
 	@IsOptional()
 	@IsArray()

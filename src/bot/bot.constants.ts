@@ -39,4 +39,7 @@ export enum FRAME_TYPE {
 	VIDEO = 'VIDEO',
 	ANIMATION = 'ANIMATION',
 	VOICE = 'VOICE',
+	AUDIO = 'AUDIO',
+	POLL = 'POLL',
+	DICE = 'DICE',
 }
