@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUrl, isURL } from 'class-validator';
+import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
 export class FileElementResponse {
 	@IsNotEmpty()
