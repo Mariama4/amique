@@ -34,14 +34,6 @@ export class UnixsocketService implements OnModuleInit {
 		return server;
 	}
 
-	public getServer(botId: string) {
-		//const isServerExists = this.servers[botId];
-		//if (!isServerExists) {
-		//	// throw error
-		//}
-		//return isServerExists;
-	}
-
 	public sendEvent(botId: string, eventData: string) {
 		//const botId = '1';
 		//const eventData = `hello from server to bot #${botId}`;
