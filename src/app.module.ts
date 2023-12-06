@@ -6,6 +6,7 @@ import { BotModule } from './bot/bot.module';
 import { FilesModule } from './files/files.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConfig } from './configs/mongo.config';
+import { UnixsocketModule } from './unixsocket/unixsocket.module';
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { getMongoConfig } from './configs/mongo.config';
 		BotModule,
 		UserModule,
 		FilesModule,
+		UnixsocketModule,
 	],
 })
 export class AppModule {}
