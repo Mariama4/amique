@@ -1,0 +1,4 @@
+export enum EVENT_TYPE {
+	UPDATE = 'UPDATE',
+	SHUTDOWN = 'SHUTDOWN',
+}

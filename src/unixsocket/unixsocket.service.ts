@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Server, Socket } from 'net';
 import { path } from 'app-root-path';
+import { SendEventDto } from './dto/send-event.dto';
 
 @Injectable()
 export class UnixsocketService implements OnModuleInit {
@@ -9,21 +10,22 @@ export class UnixsocketService implements OnModuleInit {
 	private clients: Map<string, Socket> = new Map();
 
 	onApplicationShutdown(signal: string) {
-		this.server.close(); // e.g. "SIGINT"
+		this.server.close();
 	}
 
 	onModuleInit() {
 		this.server = this.createServer();
 	}
 
-	private createServer() {
+	private createServer(): Server {
 		const server = new Server();
 
 		server.on('connection', (socket: Socket) => {
 			socket.on('data', (data) => {
-				const message = data.toString();
-				this.clients.set('1', socket);
-				console.log(message);
+				const botId = data.toString();
+				this.clients.set(botId, socket);
+				console.log(`Bot #${botId} connected`);
+				// TODO: отправление боту его схемы данных
 			});
 		});
 
@@ -34,11 +36,8 @@ export class UnixsocketService implements OnModuleInit {
 		return server;
 	}
 
-	public sendEvent(botId: string, eventData: string) {
-		//const botId = '1';
-		//const eventData = `hello from server to bot #${botId}`;
-
-		const message = JSON.stringify(eventData);
+	public sendEvent({ botId, event }: SendEventDto): void {
+		const message = JSON.stringify(event);
 		const bot = this.clients.get(botId);
 		bot.write(message);
 	}
