@@ -23,10 +23,14 @@ import { CreateFrame } from './dto/create-bot-frame.dto';
 import { UpdateBotStatus } from './dto/update-bot-status.dto';
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 import { UpdateBotDto } from './dto/update-bot.dto';
+import { UnixsocketService } from 'src/unixsocket/unixsocket.service';
 
 @Controller('bot')
 export class BotController {
-	constructor(private readonly botService: BotService) {}
+	constructor(
+		private readonly botService: BotService,
+		private readonly unixsocketService: UnixsocketService,
+	) {}
 	//	 TODO: убрать повторение кода
 	//@UseGuards(JwtAuthGuard)
 	@Post('create')
@@ -161,17 +165,14 @@ export class BotController {
 			throw new BadRequestException(SAME_STATUS_ERROR);
 		}
 
-		let botPID: number | null;
-
 		if (dto.status) {
-			botPID = this.botService.startBot(isBotExists.token);
+			//await this.unixsocketService.createServer(isBotExists.id, '');
 		} else {
-			botPID = this.botService.stopBot(dto.pid);
+			//await this.unixsocketService.;
 		}
 
 		const patchedBot = await this.botService.updateBotStatus(isBotExists.id, {
 			status: dto.status,
-			pid: botPID,
 		});
 
 		return patchedBot;

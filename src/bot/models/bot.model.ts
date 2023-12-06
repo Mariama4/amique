@@ -18,11 +18,6 @@ export class BotModel {
 	})
 	description: string;
 
-	@Prop({
-		default: null,
-	})
-	pid: number;
-
 	@Prop({ required: true })
 	token: string;
 

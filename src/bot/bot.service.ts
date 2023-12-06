@@ -6,15 +6,13 @@ import { CreateBotDto } from './dto/create-bot.dto';
 import { FrameModel } from './models/frame.model';
 import { CreateFrame } from './dto/create-bot-frame.dto';
 import { UpdateBotStatus } from './dto/update-bot-status.dto';
-import { spawn } from 'child_process';
 import { UpdateBotDto } from './dto/update-bot.dto';
 
 @Injectable()
 export class BotService {
 	constructor(
 		@InjectModel(BotModel.name) private readonly botModel: Model<BotModel>,
-		@InjectModel(FrameModel.name)
-		private readonly frameModel: Model<FrameModel>,
+		@InjectModel(FrameModel.name) private readonly frameModel: Model<FrameModel>,
 	) {}
 
 	async createBot(dto: CreateBotDto) {
@@ -69,25 +67,15 @@ export class BotService {
 				bot_id,
 				{
 					status: dto.status,
-					pid: dto.pid,
 				},
 				{ new: true },
 			)
 			.exec();
 	}
 
-	startBot(token: string): number {
-		// TODO: обработать возможные ошибки
-		const bot = spawn('python3', ['telegram-bot/bot.py', `-t=${token}`]);
-
-		return bot.pid;
-	}
-
-	stopBot(pid: number): null {
-		// TODO: обработать возможные ошибки
-		const result = spawn('kill', [`${pid}`]);
-
-		return null;
+	startBot(botId: string) {
+		//this.unixsocketService.
+		//return '';
 	}
 
 	async updateBotFrame(frame_id: string, dto: CreateFrame) {

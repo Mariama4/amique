@@ -4,8 +4,4 @@ export class UpdateBotStatus {
 	@IsNotEmpty()
 	@IsBoolean()
 	status: boolean;
-
-	@IsNotEmpty()
-	@IsInt()
-	pid: number;
 }
