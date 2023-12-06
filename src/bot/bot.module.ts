@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { BotController } from './bot.controller';
 import { BotService } from './bot.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,8 +13,9 @@ import { UnixsocketModule } from 'src/unixsocket/unixsocket.module';
 			{ name: BotModel.name, schema: BotSchema },
 			{ name: FrameModel.name, schema: FrameSchema },
 		]),
-		UnixsocketModule,
+		forwardRef(() => UnixsocketModule),
 	],
+	exports: [BotService],
 	providers: [BotService],
 })
 export class BotModule {}

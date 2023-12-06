@@ -7,6 +7,7 @@ import { FrameModel } from './models/frame.model';
 import { CreateFrame } from './dto/create-bot-frame.dto';
 import { UpdateBotStatus } from './dto/update-bot-status.dto';
 import { UpdateBotDto } from './dto/update-bot.dto';
+import { spawn } from 'node:child_process';
 
 @Injectable()
 export class BotService {
@@ -43,6 +44,8 @@ export class BotService {
 	}
 
 	async findOneFrameByBotIdAndName(botId: string, name: string) {
+		// Проверка, есть ли у такого бота фрейм с таким именем, необходимо,
+		// чтобы не писали одинаковые имена фреймов у ботов
 		return this.frameModel
 			.findOne({
 				botId,
@@ -73,9 +76,14 @@ export class BotService {
 			.exec();
 	}
 
-	startBot(botId: string) {
-		//this.unixsocketService.
-		//return '';
+	startBot(botId: string): void {
+		try {
+			// создает отдельный процесс с ботом
+			spawn('python3', ['telegram-bot/bot.py', `-botId=${botId}`]);
+		} catch (error) {
+			// TODO: написать нормальную обработку ошибки
+			console.log('ошибка запуска бота');
+		}
 	}
 
 	async updateBotFrame(frame_id: string, dto: CreateFrame) {

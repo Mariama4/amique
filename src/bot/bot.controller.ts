@@ -6,10 +6,12 @@ import {
 	Controller,
 	Delete,
 	Get,
+	Inject,
 	Param,
 	Patch,
 	Post,
 	UseGuards,
+	forwardRef,
 } from '@nestjs/common';
 import { CreateBotDto } from './dto/create-bot.dto';
 import {
@@ -29,6 +31,7 @@ import { UnixsocketService } from 'src/unixsocket/unixsocket.service';
 export class BotController {
 	constructor(
 		private readonly botService: BotService,
+		@Inject(forwardRef(() => UnixsocketService))
 		private readonly unixsocketService: UnixsocketService,
 	) {}
 	//	 TODO: убрать повторение кода
@@ -166,9 +169,15 @@ export class BotController {
 		}
 
 		if (dto.status) {
-			//await this.unixsocketService.createServer(isBotExists.id, '');
+			// запуск бота
+			this.botService.startBot(isBotExists.id);
 		} else {
-			//await this.unixsocketService.;
+			// отключение бота
+			// TODO: вынести действие в бот сервис и оттуда вызывать уже
+			this.unixsocketService.sendEvent({
+				botId,
+				event: 'SHUTDOWN',
+			});
 		}
 
 		const patchedBot = await this.botService.updateBotStatus(isBotExists.id, {
