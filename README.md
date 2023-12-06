@@ -18,3 +18,11 @@ todo:
 ![схема бд](readme/amique.svg)
 
 выглядит ужасно :)!
+
+- использование unix socket
+- почему не запуск ботов сразу на сервере ноды? чтобы если какой-то бот сломался это не сломало весь сервер, наверное
+  (ну и мой пример "шаблон" бота уже есть)
+
+учесть данные моменты:
+
+- https://docs.nestjs.com/fundamentals/lifecycle-events#asynchronous-initialization:~:text=listening%20for%20connections.-,onModuleDestroy,-()*
