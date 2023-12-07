@@ -11,6 +11,7 @@ import { path } from 'app-root-path';
 			serveRoot: '/static',
 		}),
 	],
+	exports: [FilesService],
 	controllers: [FilesController],
 	providers: [FilesService],
 })

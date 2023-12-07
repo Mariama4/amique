@@ -25,4 +25,18 @@ export class FilesService {
 	convertToWebP(file: Buffer): Promise<Buffer> {
 		return sharp(file).png().toBuffer();
 	}
+
+	// TODO: написать нормальные типы
+	async saveSchemaFile(data: object, fileName: string, fileType: string = 'json') {
+		const uploadFolder = `${path}/schemas`;
+		await ensureDir(uploadFolder);
+		const uploadFile = `${uploadFolder}/${fileName}.${fileType}`;
+		const stringData = JSON.stringify(data);
+		await writeFile(uploadFile, stringData);
+		const result: FileElementResponse = {
+			url: uploadFile,
+			name: `${fileName}.${fileType}`,
+		};
+		return result;
+	}
 }
