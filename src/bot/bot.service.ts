@@ -76,10 +76,10 @@ export class BotService {
 			.exec();
 	}
 
-	startBot(botId: string): void {
+	startBot(fileUrl: string): void {
 		try {
 			// создает отдельный процесс с ботом
-			spawn('python3', ['telegram-bot/bot.py', `-botId=${botId}`]);
+			spawn('python3', ['telegram-bot/bot.py', `-f=${fileUrl}`]);
 		} catch (error) {
 			// TODO: написать нормальную обработку ошибки
 			console.log('ошибка запуска бота');
@@ -99,5 +99,27 @@ export class BotService {
 	async deleteBotFrame(frameId: string) {
 		// удаление фрейма бота
 		return this.frameModel.deleteOne({ _id: frameId }).exec();
+	}
+
+	async generateData(botId: string): Promise<object> {
+		// генерирует данные для тг бота на основании botId
+		// 1. получить данные бота
+		// 2. получить фреймы
+		// 3. склеить это
+
+		const bot = await this.botModel.findById(botId).exec();
+		const frames = await this.frameModel
+			.find({
+				botId,
+			})
+			.exec();
+
+		const data = {
+			bot,
+			frames,
+		};
+
+		console.log(data);
+		return data;
 	}
 }

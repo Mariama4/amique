@@ -18,8 +18,21 @@ export const FRAME_NOT_CREATED_ERROR = {
 	message: 'Фрейм с таким именем не существует у данного бота',
 };
 
-export const SAME_STATUS_ERROR = 'Бот уже имеет данный статус';
-export const UNEXPECTED_CREATE_BOT_ERROR = 'Непредвиденная ошибка при создании бота';
+export const SAME_STATUS_ERROR = { error: 'Бот уже имеет данный статус', message: '' };
+export const UNEXPECTED_CREATE_BOT_ERROR = {
+	error: 'Непредвиденная ошибка при создании бота',
+	message: '',
+};
+
+export const UNEXPECTED_START_BOT_ERROR = {
+	error: 'Непредвиденная ошибка при запуске бота',
+	message: '',
+};
+
+export const UNEXPECTED_STOP_BOT_ERROR = {
+	error: 'Непредвиденная ошибка при остановке бота',
+	message: '',
+};
 
 export enum FRAME_PARSE_TYPE {
 	HTML = 'HTML',
@@ -42,4 +55,9 @@ export enum FRAME_TYPE {
 	AUDIO = 'AUDIO',
 	POLL = 'POLL',
 	DICE = 'DICE',
+}
+
+export enum BOT_EVENT_TYPE {
+	SHUTDOWN = 'SHUTDOWN',
+	UPDATE = 'UPDATE',
 }

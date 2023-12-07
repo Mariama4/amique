@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { BotModel, BotSchema } from './models/bot.model';
 import { FrameModel, FrameSchema } from './models/frame.model';
 import { UnixsocketModule } from 'src/unixsocket/unixsocket.module';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
 	controllers: [BotController],
@@ -14,6 +15,7 @@ import { UnixsocketModule } from 'src/unixsocket/unixsocket.module';
 			{ name: FrameModel.name, schema: FrameSchema },
 		]),
 		forwardRef(() => UnixsocketModule),
+		FilesModule,
 	],
 	exports: [BotService],
 	providers: [BotService],

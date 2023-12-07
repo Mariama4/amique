@@ -16,16 +16,20 @@ import {
 import { CreateBotDto } from './dto/create-bot.dto';
 import {
 	BOT_ALREADY_CREATED_ERROR,
+	BOT_EVENT_TYPE,
 	BOT_NOT_CREATED_ERROR,
 	FRAME_ALREADY_CREATED_ERROR,
 	FRAME_NOT_CREATED_ERROR,
 	SAME_STATUS_ERROR,
+	UNEXPECTED_START_BOT_ERROR,
+	UNEXPECTED_STOP_BOT_ERROR,
 } from './bot.constants';
 import { CreateFrame } from './dto/create-bot-frame.dto';
 import { UpdateBotStatus } from './dto/update-bot-status.dto';
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 import { UpdateBotDto } from './dto/update-bot.dto';
 import { UnixsocketService } from 'src/unixsocket/unixsocket.service';
+import { FilesService } from 'src/files/files.service';
 
 @Controller('bot')
 export class BotController {
@@ -33,6 +37,7 @@ export class BotController {
 		private readonly botService: BotService,
 		@Inject(forwardRef(() => UnixsocketService))
 		private readonly unixsocketService: UnixsocketService,
+		private readonly filesService: FilesService,
 	) {}
 	//	 TODO: убрать повторение кода
 	//@UseGuards(JwtAuthGuard)
@@ -41,6 +46,7 @@ export class BotController {
 		//	Поиск бота по name и userId.
 		//	У разных пользователей могут быть боты с одинаковыми
 		//	именами, но у одного пользователя не должно быть два бота с одинаковым именем!
+
 		const isBotExists = await this.botService.findOneBotByNameAndUserId(dto.name, dto.userId);
 
 		if (isBotExists != null) {
@@ -158,6 +164,8 @@ export class BotController {
 		//	...
 		// Обновить статус бота.
 
+		// TODO: генерировать файл и сохранять его
+
 		const isBotExists = await this.botService.findOneBotById(botId);
 
 		if (isBotExists == null) {
@@ -165,19 +173,33 @@ export class BotController {
 		}
 
 		if (isBotExists.status == dto.status) {
-			throw new BadRequestException(SAME_STATUS_ERROR);
+			throw new BadRequestException(SAME_STATUS_ERROR.error, SAME_STATUS_ERROR.message);
 		}
 
 		if (dto.status) {
-			// запуск бота
-			this.botService.startBot(isBotExists.id);
+			const data = await this.botService.generateData(isBotExists.id);
+			const isDone = await this.filesService.saveSchemaFile(data, isBotExists.id);
+			if (isDone != null) {
+				console.log('done');
+				// TODO: сохранение пути в базу данных
+				// запуск бота
+				this.botService.startBot(isDone.url);
+			} else {
+				throw new BadRequestException(
+					UNEXPECTED_START_BOT_ERROR.error,
+					UNEXPECTED_START_BOT_ERROR.message,
+				);
+			}
 		} else {
 			// отключение бота
-			// TODO: вынести действие в бот сервис и оттуда вызывать уже
-			this.unixsocketService.sendEvent({
-				botId,
-				event: 'SHUTDOWN',
-			});
+			try {
+				this.unixsocketService.sendEvent(botId, BOT_EVENT_TYPE.SHUTDOWN);
+			} catch (error) {
+				throw new BadRequestException(
+					UNEXPECTED_STOP_BOT_ERROR.error,
+					UNEXPECTED_STOP_BOT_ERROR.message,
+				);
+			}
 		}
 
 		const patchedBot = await this.botService.updateBotStatus(isBotExists.id, {
