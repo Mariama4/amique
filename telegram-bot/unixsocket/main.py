@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 class BotClient(asyncio.Protocol):
 	def connection_made(self, transport):
@@ -28,7 +29,7 @@ class BotClient(asyncio.Protocol):
 async def unixSocket(id):
 	# Создание соединения с Unix-сокетом
 	# TODO: поставь более оптимальный путь
-	socket_path = '../temp/bots.sock'
+	socket_path = 'temp/bots.sock'
 	loop = asyncio.get_event_loop()
 	transport, protocol = await loop.create_unix_connection(
 		lambda: BotClient(), 

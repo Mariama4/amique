@@ -25,6 +25,8 @@ import argparse
 
 import os
 
+import aiorun
+
 def createParser ():
     parser = argparse.ArgumentParser()
     parser.add_argument ('-t', '--token')
@@ -63,23 +65,23 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	await update.message.reply_text(update.message.text)
 
 
-def main(token) -> None:
-    """Start the bot."""
-    # Create the Application and pass it your bot's token.
-    application = Application.builder().token(token).read_timeout(30).write_timeout(30).build()
+def startBot(token, **kwargs) -> None:
+	print(kwargs);
+	"""Start the bot."""
+	# Create the Application and pass it your bot's token.
+	application = Application.builder().token(token).read_timeout(30).write_timeout(30).build()
 
-    # on different commands - answer in Telegram
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help_command))
+	# on different commands - answer in Telegram
+	application.add_handler(CommandHandler("start", start))
+	application.add_handler(CommandHandler("help", help_command))
 
-    # on non command i.e message - echo the message on Telegram
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+	# on non command i.e message - echo the message on Telegram
+	application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
-    # Run the bot until the user presses Ctrl-C
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+	# Run the bot until the user presses Ctrl-C
+	application.run_polling(allowed_updates=Update.ALL_TYPES)
 
-
-if __name__ == "__main__":
-	parser = createParser()
-	namespace = parser.parse_args(sys.argv[1:])
-	main(namespace.token)
+#if __name__ == "__main__":
+#	parser = createParser()
+#	namespace = parser.parse_args(sys.argv[1:])
+#	main(namespace.token)
