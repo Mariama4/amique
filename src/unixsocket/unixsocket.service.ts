@@ -33,7 +33,7 @@ export class UnixsocketService implements OnModuleInit {
 				console.log('Someone connected!');
 			});
 
-			socket.once('data', (data) => {
+			socket.on('data', (data) => {
 				const botId = data.toString();
 				this.clients.set(botId, socket);
 				console.log(`Bot #${botId} connected`);
@@ -60,6 +60,7 @@ export class UnixsocketService implements OnModuleInit {
 
 	public sendEvent(botId: string, event: string): void {
 		const message = JSON.stringify(event);
+		console.log(this.clients.size);
 		const bot = this.clients.get(botId);
 		if (bot != undefined) {
 			bot.write(message);
