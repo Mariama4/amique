@@ -195,6 +195,7 @@ export class BotController {
 			try {
 				this.unixsocketService.sendEvent(botId, BOT_EVENT_TYPE.SHUTDOWN);
 			} catch (error) {
+				console.log(error);
 				throw new BadRequestException(
 					UNEXPECTED_STOP_BOT_ERROR.error,
 					UNEXPECTED_STOP_BOT_ERROR.message,

@@ -79,7 +79,15 @@ export class BotService {
 	startBot(fileUrl: string): void {
 		try {
 			// создает отдельный процесс с ботом
-			spawn('python3', ['telegram-bot/bot.py', `-f=${fileUrl}`]);
+			console.log(`-f=${fileUrl}`);
+			//const ls =
+			spawn('python3', ['telegram-bot/main.py', `-f=${fileUrl}`]);
+			//ls.stderr.on('data', (data) => {
+			//	console.error(`stderr: ${data}`);
+			//});
+			//ls.stdout.on('data', (data) => {
+			//	console.log(`stdout: ${data}`);
+			//});
 		} catch (error) {
 			// TODO: написать нормальную обработку ошибки
 			console.log('ошибка запуска бота');
@@ -119,7 +127,7 @@ export class BotService {
 			frames,
 		};
 
-		console.log(data);
+		//console.log(data);
 		return data;
 	}
 }
