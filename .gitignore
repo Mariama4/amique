@@ -132,6 +132,6 @@ dist
 # wtf 
 .DS_Store
 env
-uploads
+uploads/*
 test.py
 schemas/*
