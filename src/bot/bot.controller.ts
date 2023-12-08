@@ -47,6 +47,8 @@ export class BotController {
 		//	У разных пользователей могут быть боты с одинаковыми
 		//	именами, но у одного пользователя не должно быть два бота с одинаковым именем!
 
+		//	автоматически создавать фрейм с именем start
+
 		const isBotExists = await this.botService.findOneBotByNameAndUserId(dto.name, dto.userId);
 
 		if (isBotExists != null) {
@@ -57,6 +59,17 @@ export class BotController {
 		}
 
 		const newBot = await this.botService.createBot(dto);
+
+		const startFrame: CreateFrame = {
+			botId: newBot.id,
+			name: 'start',
+			disableWebPagePreview: true,
+			parseMode: 'HTML',
+			type: 'TEXT',
+			text: 'привет это тест start!',
+		};
+
+		await this.botService.createFrame(newBot.id, startFrame);
 		return newBot;
 	}
 
@@ -66,6 +79,8 @@ export class BotController {
 		//	Проверяется есть ли такой бот с botId.
 		//	Если бот с таким botId существует, тогда
 		//	проверяется есть ли фрейм с таким botId и name
+
+		//TODO: сделать проверку входных данных, например, если выбран тип фрейма - текст, то поле текст должно быть заполнено!
 
 		const isBotExists = await this.botService.findOneBotById(botId);
 

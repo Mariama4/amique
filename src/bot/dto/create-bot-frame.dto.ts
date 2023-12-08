@@ -205,17 +205,24 @@ class FrameDice {}
 export class CreateFrame {
 	@IsNotEmpty()
 	@IsString()
+	@IsMongoId()
+	botId: string;
+
+	@IsNotEmpty()
+	@IsString()
 	@IsAlpha()
 	name: string;
 
-	@IsNotEmpty()
+	@IsOptional()
+	//@IsNotEmpty()
 	@IsString()
-	description: string;
+	description?: string;
 
-	@IsNotEmpty()
+	@IsOptional()
+	//@IsNotEmpty()
 	@IsString()
 	@IsMongoId()
-	nextFrameId: string;
+	nextFrameId?: string;
 
 	@IsNotEmpty()
 	@IsBoolean()
@@ -223,77 +230,78 @@ export class CreateFrame {
 
 	@IsNotEmpty()
 	@IsString()
-	@IsEnum(FRAME_PARSE_TYPE)
+	@IsEnum(FRAME_TYPE)
 	type: string;
 
 	@IsNotEmpty()
 	@IsString()
-	@IsEnum(FRAME_TYPE)
+	@IsEnum(FRAME_PARSE_TYPE)
 	parseMode: string;
 
 	@IsOptional()
 	@IsNotEmpty()
 	@IsString()
-	text: string;
+	text?: string;
 
 	@IsOptional()
 	@ValidateNested()
-	photo: FramePhoto;
+	photo?: FramePhoto;
 
 	@IsOptional()
 	@ValidateNested()
-	video: FrameVideo;
+	video?: FrameVideo;
 
 	@IsOptional()
 	@ValidateNested()
-	animation: FrameAnimation;
+	animation?: FrameAnimation;
 
 	@IsOptional()
 	@ValidateNested()
-	document: FrameDocument;
+	document?: FrameDocument;
 
 	@IsOptional()
 	@ValidateNested()
-	audio: FrameAudio;
+	audio?: FrameAudio;
 
 	@IsOptional()
 	@ValidateNested()
-	voice: FrameVoice;
+	voice?: FrameVoice;
 
 	@IsOptional()
 	@ValidateNested()
-	videoNote: FrameVideoNote;
+	videoNote?: FrameVideoNote;
 
 	@IsOptional()
 	@ValidateNested()
-	mediaGroup: FrameMediaGroup;
+	mediaGroup?: FrameMediaGroup;
 
 	@IsOptional()
 	@ValidateNested()
-	location: FrameLocation;
+	location?: FrameLocation;
 
 	@IsOptional()
 	@ValidateNested()
-	venue: FrameVenue;
+	venue?: FrameVenue;
 
 	@IsOptional()
 	@ValidateNested()
-	contact: FrameContact;
+	contact?: FrameContact;
 
 	@IsOptional()
 	@ValidateNested()
-	webApp: FrameWebApp;
+	webApp?: FrameWebApp;
 
 	// TODO:
 	@IsOptional()
-	poll: FramePoll;
+	poll?: FramePoll;
 
 	// TODO:
 	@IsOptional()
-	dice: FrameDice;
+	dice?: FrameDice;
 
 	@IsOptional()
 	@IsArray()
-	@ValidateNested({ each: true })
-	markup: [FrameMarkup];
+	// TODO:
+	//@ValidateNested({ each: true })
+	markup?: [FrameMarkup];
 }

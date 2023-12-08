@@ -185,7 +185,7 @@ export class FrameModel {
 	@Prop({ default: '' })
 	text: string;
 
-	@Prop({ default: FramePhoto })
+	@Prop()
 	photo: FramePhoto;
 
 	@Prop()
