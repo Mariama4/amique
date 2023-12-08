@@ -1,19 +1,4 @@
 #!/usr/bin/env python
-# pylint: disable=unused-argument, import-error
-# This program is dedicated to the public domain under the CC0 license.
-
-"""
-Simple Bot to reply to Telegram messages.
-
-First, a few handler functions are defined. Then, those functions are passed to
-the Application and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
-"""
 
 import logging
 
@@ -43,45 +28,42 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
-# Define a few command handlers. These usually take the two arguments update and
-# context.
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /start is issued."""
-    user = update.effective_user
-    await update.message.reply_html(
-        rf"Hi {user.mention_html()}!",
-        reply_markup=ForceReply(selective=True),
-    )
+
+def startBot(schema) -> None:
 
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a message when the command /help is issued."""
-    await update.message.reply_text("Help!")
+	async def master_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+		message = update.message.text
+		await update.message.reply_html(
+			rf"Hi {message}!"
+		)
+	
+	async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+		user = update.effective_user
+		await update.message.reply_html(
+			rf"wtf {user.mention_html()}!",
+			reply_markup=ForceReply(selective=True),
+		)
 
+	async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+		await update.message.reply_text(
+			'Такой команды нет!'
+			)
 
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-	"""Echo the user message."""
-	print(update.message.text)
-	await update.message.reply_text(update.message.text)
+	
 
-
-def startBot(token, **kwargs) -> None:
-	print(kwargs);
 	"""Start the bot."""
 	# Create the Application and pass it your bot's token.
-	application = Application.builder().token(token).read_timeout(30).write_timeout(30).build()
+	application = Application.builder().token(TOKEN).read_timeout(30).write_timeout(30).build()
 
-	# on different commands - answer in Telegram
+	# По умолчанию, /start должен быть всегда в боте
 	application.add_handler(CommandHandler("start", start))
-	application.add_handler(CommandHandler("help", help_command))
+	# on different commands - answer in Telegram
+	application.add_handler(CommandHandler(FRAMES.keys(), master_handler))
+	
 
 	# on non command i.e message - echo the message on Telegram
 	application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
 	# Run the bot until the user presses Ctrl-C
 	application.run_polling(allowed_updates=Update.ALL_TYPES)
-
-#if __name__ == "__main__":
-#	parser = createParser()
-#	namespace = parser.parse_args(sys.argv[1:])
-#	main(namespace.token)
