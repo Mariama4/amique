@@ -30,7 +30,14 @@ logger = logging.getLogger(__name__)
 
 
 def startBot(schema) -> None:
+	
+	BOT = schema['bot']
+	FRAMES = dict()
 
+	for frame in schema['frames']:
+		FRAMES.update({frame['name']: frame})
+
+	TOKEN = BOT['token']
 
 	async def master_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 		message = update.message.text
