@@ -1,22 +1,14 @@
 #!/usr/bin/env python
 
 import logging
-
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
-
 import sys
 import argparse
-
 import os
-
 import aiorun
+from utils import getNextFrame
 
-def createParser ():
-    parser = argparse.ArgumentParser()
-    parser.add_argument ('-t', '--token')
-
-    return parser
 
 # Enable logging
 logging.basicConfig(
@@ -30,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 def startBot(schema) -> None:
-	
+
 	BOT = schema['bot']
 	FRAMES = dict()
 
@@ -39,18 +31,45 @@ def startBot(schema) -> None:
 
 	TOKEN = BOT['token']
 
-	async def master_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-		message = update.message.text
-		await update.message.reply_html(
-			rf"Hi {message}!"
-		)
-	
+	# TODO: удалять пользователя, если он вышел из бота
+	# user id: state
+	USERS = dict()
+
+	# TODO: написать функцию, которая получает цепочку сообщений по nextFrameName и выводит их по цепочке
+
 	async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-		user = update.effective_user
-		await update.message.reply_html(
-			rf"wtf {user.mention_html()}!",
-			reply_markup=ForceReply(selective=True),
-		)
+		#userResponseText = update.message.text
+		
+		nextFrame = FRAMES.get('start')
+
+		USERS.update({
+			update.message.from_user.id: nextFrame
+		})
+
+		# обработка фрейма и вывод того чего надо
+
+		#nextFrame = getNextFrame(FRAMES, currentFrame, userResponseText)
+		#user = update.effective_user
+		#await update.message.reply_html(
+		#	rf"wtf {user.mention_html()}!",
+		#	reply_markup=ForceReply(selective=True),
+		#)
+
+	async def master_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+		userText = update.message.text
+		previousFrame = USERS.get(update.message.from_user.id)
+		nextFrame = getNextFrame(FRAMES, previousFrame, userText)
+
+		USERS.update({
+			update.message.from_user.id: nextFrame
+		})
+
+		# обработка фрейма и вывод того чего надо
+
+
+		#await update.message.reply_html(
+		#	rf"Hi {message}!"
+		#)
 
 	async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 		await update.message.reply_text(
