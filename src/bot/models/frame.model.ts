@@ -129,7 +129,7 @@ class FrameMarkup {
 	text: string;
 
 	@Prop({ type: MSchema.Types.ObjectId, ref: 'frames' })
-	nextFrameId: Types.ObjectId;
+	nextFrameName: Types.ObjectId;
 }
 
 class FramePoll {}
@@ -152,7 +152,7 @@ export class FrameModel {
 	description: string;
 
 	@Prop({ type: MSchema.Types.ObjectId, ref: 'frames' })
-	nextFrameId: Types.ObjectId;
+	nextFrameName: Types.ObjectId;
 
 	@Prop({
 		required: true,

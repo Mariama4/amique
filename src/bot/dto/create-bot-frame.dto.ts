@@ -195,7 +195,7 @@ class FrameMarkup {
 	@IsNotEmpty()
 	@IsString()
 	@IsMongoId()
-	nextFrameId: string;
+	nextFrameName: string;
 }
 
 class FramePoll {}
@@ -222,7 +222,7 @@ export class CreateFrame {
 	//@IsNotEmpty()
 	@IsString()
 	@IsMongoId()
-	nextFrameId?: string;
+	nextFrameName?: string;
 
 	@IsNotEmpty()
 	@IsBoolean()
