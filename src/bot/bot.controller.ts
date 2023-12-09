@@ -60,7 +60,7 @@ export class BotController {
 
 		const newBot = await this.botService.createBot(dto);
 
-		// TODO: проверять, что пробелы заменены на "_"
+		// TODO: проверять, что все символы кроме букв и цифр и _ заменены на "_"
 		const startFrame: CreateFrame = {
 			botId: newBot.id,
 			name: 'start',
@@ -98,7 +98,7 @@ export class BotController {
 			);
 		}
 
-		// TODO: проверять, что пробелы заменены на "_"
+		// TODO: проверять, что все символы кроме букв и цифр и _ заменены на "_"
 		const newFrame = await this.botService.createFrame(botId, dto);
 
 		return newFrame;
@@ -248,7 +248,7 @@ export class BotController {
 			throw new BadRequestException(FRAME_NOT_CREATED_ERROR.error, BOT_NOT_CREATED_ERROR.message);
 		}
 
-		// TODO: проверять, что пробелы заменены на "_"
+		// TODO: проверять, что все символы кроме букв и цифр и _ заменены на "_"
 		const patchedFrame = await this.botService.updateBotFrame(frameId, dto);
 
 		return patchedFrame;
