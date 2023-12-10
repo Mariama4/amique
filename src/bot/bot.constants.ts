@@ -37,6 +37,7 @@ export const UNEXPECTED_STOP_BOT_ERROR = {
 export enum FRAME_PARSE_TYPE {
 	HTML = 'HTML',
 	MD = 'Markdown',
+	None = 'None',
 }
 
 export enum FRAME_TYPE {

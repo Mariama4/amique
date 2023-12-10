@@ -125,7 +125,6 @@ export class BotService {
 			bot,
 			frames,
 		};
-		console.log(data);
 
 		//console.log(data);
 		return data;

@@ -176,7 +176,7 @@ export class FrameModel {
 	})
 	type: string;
 
-	@Prop({ required: true, enum: ['HTML', 'Markdown'] })
+	@Prop({ required: true, enum: ['HTML', 'Markdown', 'None'] })
 	parseMode: string;
 
 	@Prop({ required: true })
