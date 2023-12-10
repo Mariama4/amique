@@ -1,9 +1,9 @@
 from handlers import *
 
-def messageDispatcher(frame, text, update, context):
+async def messageDispatcher(frame, update, context):
 	match frame['type']:
-		case "text":
-			return textHandler(data, message)
+		case "TEXT":
+			return await textHandler(frame, update, context)
 		case "photo":
 			return photoHandler(data, message, bot, API_PUBLIC)
 		case "media_group":

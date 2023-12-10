@@ -1,5 +1,6 @@
 import argparse
 import sys
+from telegram import ReplyKeyboardMarkup 
 
 def getNamespace():
 	def createParser():
@@ -18,3 +19,28 @@ def getNextFrame(FRAMES, previousFrame, userText):
 			return value['nextFrameName']
 	# Если ничего не найдено, то возвращаем текущий фрейм
 	return previousFrame
+
+
+# TODO: добавить возможность работы с другим типом кнопок (inline)
+def markupBuilder(buttons):
+
+	reply_keyboard = [[button['text'] for button in buttons]]
+
+	return ReplyKeyboardMarkup(
+		reply_keyboard, 
+		one_time_keyboard=True, 
+		resize_keyboard=True
+		#input_field_placeholder="Boy or Girl?"
+	)
+
+
+# FIXME: вообще работать не должно, надо исправить
+def mediaGroupBuilder(media):
+	#mediaGroup = types.MediaGroup()
+	#for index, value in enumerate(media):
+	#	mediaGroup.attach_photo(
+	#		InputFile.from_url(api_public + value)
+	#	)
+
+	#return mediaGroup
+	...

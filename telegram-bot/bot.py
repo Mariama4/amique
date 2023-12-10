@@ -8,6 +8,7 @@ import argparse
 import os
 import aiorun
 from utils import getNextFrame
+from dispatcher import messageDispatcher
 
 
 # Enable logging
@@ -46,6 +47,8 @@ def startBot(schema) -> None:
 			update.message.from_user.id: nextFrame
 		})
 
+		await messageDispatcher(nextFrame, update, context)
+
 		# обработка фрейма и вывод того чего надо
 
 		#nextFrame = getNextFrame(FRAMES, currentFrame, userResponseText)
@@ -63,6 +66,8 @@ def startBot(schema) -> None:
 		USERS.update({
 			update.message.from_user.id: nextFrame
 		})
+
+
 
 		# обработка фрейма и вывод того чего надо
 
