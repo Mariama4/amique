@@ -4,31 +4,35 @@ async def messageDispatcher(frame, update, context):
 	match frame['type']:
 		case "TEXT":
 			return await textHandler(frame, update, context)
-		case "photo":
+		case "PHOTO":
 			return photoHandler(data, message, bot, API_PUBLIC)
-		case "media_group":
+		case "MEDIA_GROUP":
 			return mediaGroupHandler(data, message, bot, API_PUBLIC)
-		case "video_note":
+		case "VIDEO_NOTE":
 			return videoNoteHandler(data, message, bot, API_PUBLIC)
-		case "venue":
+		case "VENUE":
 			return venueHandler(data, message, bot)
-		case "contact":
+		case "CONTACT":
 			return contactHandler(data, message, bot)
-		case "web_app":
+		case "WEB_APP":
 			return webAppHandler(data, message)
 		case "document":
 			return documentHandler(data, message, bot, API_PUBLIC)
-		case "location":
+		case "LOCATION":
 			return locationHandler(data, message, bot)
-		case "video":
+		case "VIDEO":
 			return videoHandler(data, message, bot, API_PUBLIC)
-		case "animation":
+		case "ANIMATION":
 			return animationHandler(data, message, bot, API_PUBLIC)
-		case "audio":
+		case "AUDIO":
 			return audioHandler(data, message, bot, API_PUBLIC)
-		case "voice":
+		case "VOICE":
 			return voiceHandler(data, message, bot, API_PUBLIC)
+		case "POLL":
+			return None
+		case "DICE":
+			return None
 		case _:
-			# not found
+			# TODO: выкидывать ошибку и возвращать пользователя в начало start
 			pass
 
