@@ -1,33 +1,33 @@
-def messageDispatcher(nextFrame, userText, update):
-	match nextFrame['type']:
+from handlers import *
+
+def messageDispatcher(frame, text, update, context):
+	match frame['type']:
 		case "text":
-			return textMessageHandler(data, message)
+			return textHandler(data, message)
 		case "photo":
-			return photoMessageHandler(data, message, bot, API_PUBLIC)
+			return photoHandler(data, message, bot, API_PUBLIC)
 		case "media_group":
-			return mediaGroupMessageHandler(data, message, bot, API_PUBLIC)
+			return mediaGroupHandler(data, message, bot, API_PUBLIC)
 		case "video_note":
-			return videoNoteMessageHandler(data, message, bot, API_PUBLIC)
+			return videoNoteHandler(data, message, bot, API_PUBLIC)
 		case "venue":
-			return venueMessageHandler(data, message, bot)
+			return venueHandler(data, message, bot)
 		case "contact":
-			return contactMessageHandler(data, message, bot)
+			return contactHandler(data, message, bot)
 		case "web_app":
 			return webAppHandler(data, message)
 		case "document":
-			return documentMessageHandler(data, message, bot, API_PUBLIC)
+			return documentHandler(data, message, bot, API_PUBLIC)
 		case "location":
-			return locationMessageHandler(data, message, bot)
+			return locationHandler(data, message, bot)
 		case "video":
-			return videoMessageHandler(data, message, bot, API_PUBLIC)
+			return videoHandler(data, message, bot, API_PUBLIC)
 		case "animation":
-			return animationMessageHandler(data, message, bot, API_PUBLIC)
+			return animationHandler(data, message, bot, API_PUBLIC)
 		case "audio":
-			return audioMessageHandler(data, message, bot, API_PUBLIC)
+			return audioHandler(data, message, bot, API_PUBLIC)
 		case "voice":
-			return voiceMessageHandler(data, message, bot, API_PUBLIC)
-		case "stored_frame_id":
-			return storedFramesController(data, message, bot, dp)
+			return voiceHandler(data, message, bot, API_PUBLIC)
 		case _:
 			# not found
 			pass
