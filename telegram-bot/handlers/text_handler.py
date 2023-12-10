@@ -1,2 +1,2 @@
-async def textHandler(frame, update):
+async def textHandler(frame, update, context):
 	...
