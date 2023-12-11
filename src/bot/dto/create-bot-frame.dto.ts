@@ -96,7 +96,7 @@ class FrameVideoNote {
 }
 
 class FrameMediaGroup {
-	// TODO: проверить правильно ли поставил
+	// TODO: проверить правильно ли поставил, добавить ограничение от 2 до 10 файлов ОДНОГО типа
 	@IsNotEmpty()
 	@IsArray()
 	@IsString({ each: true })
