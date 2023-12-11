@@ -9,6 +9,7 @@ import multiprocessing
 import os
 from utils import getNamespace
 
+# TODO: улучшить логику
 if __name__ == "__main__":
 	# 1. получение пути до файла из аргумента
 	# 2. загрузить данные
@@ -19,6 +20,7 @@ if __name__ == "__main__":
 	FILE_PATH = NAMESPACE.file
 	FILE_JSON = json.load(open(FILE_PATH))
 	BOT_ID = Path(FILE_PATH).stem
+
 
 	#запуск бота в отдельном процессе
 	telegram_process = multiprocessing.Process(target=startBot, args=(FILE_JSON,))

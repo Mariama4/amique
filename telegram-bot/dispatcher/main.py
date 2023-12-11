@@ -1,36 +1,39 @@
 from handlers import *
+from config import FILES_ADDRESS
 
 async def messageDispatcher(frame, update, context):
 	match frame['type']:
 		case "TEXT":
 			return await textHandler(frame, update, context)
 		case "PHOTO":
-			return photoHandler(data, message, bot, API_PUBLIC)
+			return await photoHandler(frame, update, context, FILES_ADDRESS)
 		case "MEDIA_GROUP":
-			return mediaGroupHandler(data, message, bot, API_PUBLIC)
+			return mediaGroupHandler(frame, update, context, FILES_ADDRESS)
 		case "VIDEO_NOTE":
-			return videoNoteHandler(data, message, bot, API_PUBLIC)
+			return videoNoteHandler(frame, update, context, FILES_ADDRESS)
 		case "VENUE":
-			return venueHandler(data, message, bot)
+			return venueHandler(frame, update, context)
 		case "CONTACT":
-			return contactHandler(data, message, bot)
+			return contactHandler(frame, update, context)
 		case "WEB_APP":
-			return webAppHandler(data, message)
+			return webAppHandler(frame, update)
 		case "document":
-			return documentHandler(data, message, bot, API_PUBLIC)
+			return documentHandler(frame, update, context, FILES_ADDRESS)
 		case "LOCATION":
-			return locationHandler(data, message, bot)
+			return locationHandler(frame, update, context)
 		case "VIDEO":
-			return videoHandler(data, message, bot, API_PUBLIC)
+			return videoHandler(frame, update, context, FILES_ADDRESS)
 		case "ANIMATION":
-			return animationHandler(data, message, bot, API_PUBLIC)
+			return animationHandler(frame, update, context, FILES_ADDRESS)
 		case "AUDIO":
-			return audioHandler(data, message, bot, API_PUBLIC)
+			return audioHandler(frame, update, context, FILES_ADDRESS)
 		case "VOICE":
-			return voiceHandler(data, message, bot, API_PUBLIC)
+			return voiceHandler(frame, update, context, FILES_ADDRESS)
 		case "POLL":
+			# TODO: реализовать
 			return None
 		case "DICE":
+			# TODO: реализовать
 			return None
 		case _:
 			# TODO: выкидывать ошибку и возвращать пользователя в начало start

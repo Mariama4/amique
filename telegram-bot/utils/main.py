@@ -44,3 +44,12 @@ def mediaGroupBuilder(media):
 
 	#return mediaGroup
 	...
+
+# TODO: изучить, возможно, есть способ без внешнего сервиса
+def getHost():
+	import urllib
+
+	response = urllib.request.urlopen("https://api.ipify.org")
+	ip = response.read().decode("utf-8")
+
+	return ip
