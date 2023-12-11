@@ -1,0 +1,29 @@
+{
+	"bot": {
+		"_id": "65723f3e58d682f19030e7a3",
+		"userId": "65723ec4cb2590f39906e672",
+		"name": "test bot",
+		"description": "",
+		"token": "6313174368:AAFhpC4d7jZqfw13L4Z8h9xg58RuEVL7cKU",
+		"status": false,
+		"__v": 0
+	},
+	"frames": [
+		{
+			"_id": "657705389f43974dc640ce45",
+			"botId": "65723f3e58d682f19030e7a3",
+			"name": "start",
+			"description": "тест описания",
+			"type": "PHOTO",
+			"parseMode": "HTML",
+			"disableWebPagePreview": true,
+			"text": "тест текста",
+			"photo": { "source": "2023-12-11-15-46-39-267/orig.png", "caption": "тест картинки" },
+			"video": { "source": "2023-12-11-15-46-39-267/test.mp4", "caption": "видео тест" },
+			"markup": [],
+			"createdAt": "2023-12-11T12:48:56.861Z",
+			"updatedAt": "2023-12-11T12:48:56.861Z",
+			"__v": 0
+		}
+	]
+}
