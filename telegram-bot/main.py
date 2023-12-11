@@ -17,7 +17,8 @@ if __name__ == "__main__":
 	# 4. запуск бота
 	
 	NAMESPACE = getNamespace()
-	FILE_PATH = NAMESPACE.file
+	# FILE_PATH = NAMESPACE.file
+	FILE_PATH = '/Users/georgytaskabulov/Desktop/amique/schemas/65723f3e58d682f19030e7a3.json'
 	FILE_JSON = json.load(open(FILE_PATH))
 	BOT_ID = Path(FILE_PATH).stem
 

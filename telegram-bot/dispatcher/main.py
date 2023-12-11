@@ -22,7 +22,7 @@ async def messageDispatcher(frame, update, context):
 		case "LOCATION":
 			return locationHandler(frame, update, context)
 		case "VIDEO":
-			return videoHandler(frame, update, context, FILES_ADDRESS)
+			return await videoHandler(frame, update, context, FILES_ADDRESS)
 		case "ANIMATION":
 			return animationHandler(frame, update, context, FILES_ADDRESS)
 		case "AUDIO":

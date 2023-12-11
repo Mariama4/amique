@@ -1,6 +1,6 @@
 import argparse
 import sys
-from telegram import ReplyKeyboardMarkup 
+from telegram import ReplyKeyboardMarkup, InputMediaPhoto
 
 def getNamespace():
 	def createParser():
@@ -35,15 +35,13 @@ def markupBuilder(buttons):
 
 
 # FIXME: вообще работать не должно, надо исправить
-def mediaGroupBuilder(media):
-	#mediaGroup = types.MediaGroup()
-	#for index, value in enumerate(media):
-	#	mediaGroup.attach_photo(
-	#		InputFile.from_url(api_public + value)
-	#	)
+def mediaGroupBuilder(media, caption):
+	mediaGroup = []
+	for index, value in enumerate(media):
+		mediaGroup.append(
+			InputMediaPhoto(media=value,caption=caption if index == 0 else ''))
 
-	#return mediaGroup
-	...
+	return mediaGroup
 
 # TODO: изучить, возможно, есть способ без внешнего сервиса
 def getHost():
