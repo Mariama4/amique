@@ -108,6 +108,7 @@ export class BotService {
 		return this.frameModel.deleteOne({ _id: frameId }).exec();
 	}
 
+	// TODO: сделать возвращаемый тип
 	async generateData(botId: string): Promise<object> {
 		// генерирует данные для тг бота на основании botId
 		// 1. получить данные бота
@@ -126,7 +127,6 @@ export class BotService {
 			frames,
 		};
 
-		//console.log(data);
 		return data;
 	}
 }

@@ -41,13 +41,13 @@ export class UnixsocketService implements OnModuleInit {
 
 			socket.on('close', (hadError) => {
 				this.deleteClientBySocket(socket);
-				console.log('hadError ' + hadError);
+				//console.log('hadError ' + hadError);
 			});
 
 			socket.on('error', (error) => {
 				// TODO: перепроверить (вообще все перепроверить)
 				this.deleteClientBySocket(socket);
-				console.log('error ' + error);
+				//console.log('error ' + error);
 			});
 		});
 
