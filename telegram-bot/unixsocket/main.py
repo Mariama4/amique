@@ -22,9 +22,10 @@ class BotClient(asyncio.Protocol):
 		while True:
 			message = (await self.reader.read(1024)).decode('utf8')
 			#TODO: сделать нормальную проверку, эта не подходит!
+			print(f'Bot #{namespace.id} Received request: {message}')
 			if 'SHUTDOWN' in message:
 				break
-			print(f'Bot #{namespace.id} Received request: {message}')
+			
 
 async def unixSocket(id):
 	# Создание соединения с Unix-сокетом
